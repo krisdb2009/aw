@@ -91,12 +91,12 @@ function mouse_edge_interval_stop() {
 }
 
 function canvas_mousemove(e) {
-    if(e.clientX > canvas.width - 50) {
+/*    if(e.clientX > canvas.width - 50) {
         mouse_edge_right = true;
         mouse_edge_interval_start();
     } else {
         mouse_edge_interval_stop();
-    }
+    }*/
     mapLoop(function(tile, x, y) {
         if(tile.hovered) {
             tile.hovered = false;
@@ -113,6 +113,22 @@ function canvas_mousemove(e) {
         }
     });
 }
+
+onwheel = function(e) {
+    if(e.deltaY < 0) {
+        if(tile_width > 512 || tile_height > 512) return;
+        tile_width = tile_width + 8;
+        tile_height = tile_height + 8;
+    }
+    if(e.deltaY > 0) {
+        if(tile_width < 0 || tile_height < 0) return;
+        tile_width = tile_width - 8;
+        tile_height = tile_height - 8;
+    }
+    mapLoop(function(tile) {
+        tile.update = true;
+    });
+};
 
 onresize = function() {
     //canvas.width = 1366;
